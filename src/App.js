@@ -1,45 +1,93 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import BookCreate from './components/book-create';
 import AddColor from './components/add-color';
 import BookList from './components/book-list';
+import axios from 'axios';
 
 function App () {
   const [books, setBooks] = useState([]);
 
-  const createBook = (title) => {
-   const updatedBooks = [
-    ...books,
-    {
-      id: Math.round(Math.random() * 9999),
-      title: title
-    }
-   ];
+  const fetchBooks = async () => {
+    const response = await axios.get('http://localhost:3001/books');
 
-   setBooks(updatedBooks);
+    // const updatedBooks = [
+    //   ...books,
+    //   response.data
+    // ];
+
+    setBooks(response.data);
   }
 
-  const deleteBookById = (id) => {
-    const updatedBooks = books.filter((book) => {
-      if(book.id !== id){
-        return book;
-      }
+  useEffect(() => {
+     fetchBooks();
+  },[]);
+
+  const createBook = async (title) => {
+    const response = await axios.post('http://localhost:3001/books', {
+      title
     });
 
+    const updatedBooks = [
+      ...books,
+      response.data
+    ];
+
     setBooks(updatedBooks);
+
+  //  const updatedBooks = [
+  //   ...books,
+  //   {
+  //     id: Math.round(Math.random() * 9999),
+  //     title: title
+  //   }
+  //  ];
+
+  //  setBooks(updatedBooks);
   }
 
-  const editBooksById = (id, newTitle) => {
-    const updatedBooks = books.map((book) => {
+  const deleteBookById = async (id) => {
+    await axios.delete(`http://localhost:3001/books/${id}`);
+    // console.log(response.data);
+    fetchBooks();
+    // const updatedBooks = books.filter((book) => {
+    //   if(book.id !== id){
+    //     return book;
+    //   }
+    // });
+
+    // setBooks(updatedBooks);
+  }
+
+  const editBooksById = async (id, newTitle) => {
+
+    const response = await axios.put(`http://localhost:3001/books/${id}`, {
+      title: newTitle
+    });
+
+    // console.log(response.data);
+
+    const updatedBooks = books.map((book)=>{
       if(book.id === id){
         return {
           ...book,
-          title: newTitle
+          ...response.data
         };
       }
-      return book;
     });
 
     setBooks(updatedBooks);
+    
+    // const updatedBooks = books.map((book) => {
+    //   if(book.id === id){
+    //     return {
+    //       ...book,
+    //       title: newTitle
+    //     };
+    //   }
+    //   return book;
+    // });
+
+    // setBooks(updatedBooks);
   }
 
   return (<div className='app'>
