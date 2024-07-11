@@ -1,10 +1,12 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import BookCreate from './components/book-create';
 // import AddColor from './components/add-color';
 import BookList from './components/book-list';
 // import axios from 'axios';
 
-import BooksContext from './context/books';
+// import BooksContext from './context/books';
+
+import useBooksContext from './hooks/use-books-context';
 
 function App () {
   // const [books, setBooks] = useState([]);
@@ -20,10 +22,11 @@ function App () {
   //   setBooks(response.data);
   // }
 
-  const {fetchBooks} = useContext(BooksContext);
+  // const {fetchBooks} = useContext(BooksContext);
+  const {fetchBooks, stableFetchBooks} = useBooksContext();
 
   useEffect(() => {
-     fetchBooks();
+    stableFetchBooks();
   },[]);
 
   // const createBook = async (title) => {

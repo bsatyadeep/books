@@ -1,16 +1,8 @@
 {
   "books": [
     {
-      "id": "41b7",
-      "title": "First and Furious"
-    },
-    {
-      "title": "Text Book",
-      "id": "c87a"
-    },
-    {
-      "id": "43f8",
-      "title": "new text book"
+      "id": "5b8f",
+      "title": "New Text Book"
     }
   ]
 }
